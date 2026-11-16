@@ -1,6 +1,7 @@
 # PROJET_URBANWATT
 
 Base PostgreSQL qui regroupe les clients, leurs véhicules, les stations et bornes de recharge, les sessions de recharge et leurs paiements, ainsi que le suivi de maintenance (incidents, interventions, techniciens).
+Vous retrouverez dans "Documentation.pdf" tout ce qui concerne justification de nos choix, captures d'écran prouvant le fonctionnement de la base de données, captures d'écran des résultats des requêtes données ainsi que les procédures de sauvegardes et de restauration.
 
 ## Sommaire
 
@@ -16,7 +17,7 @@ projet-urbanwatt/
 ├── README.md
 │       
 ├── docs/
-│   ├── cardinalites_regles_gestion.md
+│   ├── Documentation.pdf
 │   └── Urbanwatt_schema.jpg
 ├── app/
 │    ├──
