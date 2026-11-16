@@ -1,0 +1,97 @@
+CREATE TABLE client (
+    id_client        INTEGER PRIMARY KEY,
+    prenom           VARCHAR(100) NOT NULL,
+    nom              VARCHAR(100) NOT NULL,
+    email            VARCHAR(255) NOT NULL UNIQUE,
+    ville            VARCHAR(100),
+    date_inscription DATE NOT NULL
+);
+
+CREATE TABLE vehicule (
+    id_vehicule            INTEGER PRIMARY KEY,
+    id_client              INTEGER NOT NULL REFERENCES client(id_client),
+    immatriculation        VARCHAR(20) NOT NULL UNIQUE,
+    marque                 VARCHAR(50) NOT NULL,
+    modele                 VARCHAR(50) NOT NULL,
+    capacite_batterie_kwh  NUMERIC(6,2) CHECK (capacite_batterie_kwh > 0)
+);
+
+CREATE TABLE station (
+    id_station     INTEGER PRIMARY KEY,
+    code_station   VARCHAR(20) NOT NULL UNIQUE,
+    nom_station    VARCHAR(150) NOT NULL,
+    ville          VARCHAR(100) NOT NULL,
+    adresse        VARCHAR(255) NOT NULL,
+    date_ouverture DATE
+);
+
+CREATE TABLE borne (
+    id_borne     INTEGER PRIMARY KEY,
+    id_station   INTEGER NOT NULL REFERENCES station(id_station),
+    code_borne   VARCHAR(20) NOT NULL UNIQUE,
+    puissance_kw NUMERIC(6,1) NOT NULL CHECK (puissance_kw > 0),
+    connecteur   VARCHAR(30) NOT NULL,
+    etat         VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE session_recharge (
+    id_session    INTEGER PRIMARY KEY,
+    id_borne      INTEGER NOT NULL REFERENCES borne(id_borne),
+    id_vehicule   INTEGER NOT NULL REFERENCES vehicule(id_vehicule),
+    debut_session TIMESTAMP NOT NULL,
+    fin_session   TIMESTAMP,
+    energie_kwh   NUMERIC(8,2) CHECK (energie_kwh >= 0),
+    cout_eur      NUMERIC(8,2) CHECK (cout_eur >= 0),
+    statut        VARCHAR(30) NOT NULL,
+    CHECK (fin_session IS NULL OR fin_session >= debut_session)
+);
+
+CREATE TABLE paiement (
+    id_paiement   INTEGER PRIMARY KEY,
+    id_session    INTEGER NOT NULL REFERENCES session_recharge(id_session),
+    date_paiement TIMESTAMP NOT NULL,
+    montant_eur   NUMERIC(8,2) NOT NULL CHECK (montant_eur >= 0),
+    mode_paiement VARCHAR(30) NOT NULL,
+    statut        VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE incident (
+    id_incident      INTEGER PRIMARY KEY,
+    id_borne         INTEGER NOT NULL REFERENCES borne(id_borne),
+    date_signalement TIMESTAMP NOT NULL,
+    date_resolution  TIMESTAMP,
+    categorie        VARCHAR(50) NOT NULL,
+    gravite          VARCHAR(20) NOT NULL,
+    statut           VARCHAR(30) NOT NULL,
+    description      TEXT,
+    CHECK (date_resolution IS NULL OR date_resolution >= date_signalement)
+);
+
+CREATE TABLE technicien (
+    id_technicien INTEGER PRIMARY KEY,
+    prenom        VARCHAR(100) NOT NULL,
+    nom           VARCHAR(100) NOT NULL,
+    email         VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE intervention (
+    id_intervention INTEGER PRIMARY KEY,
+    id_incident     INTEGER NOT NULL REFERENCES incident(id_incident),
+    id_technicien   INTEGER NOT NULL REFERENCES technicien(id_technicien),
+    date_debut      TIMESTAMP NOT NULL,
+    date_fin        TIMESTAMP,
+    statut          VARCHAR(30) NOT NULL,
+    compte_rendu    TEXT,
+    CHECK (date_fin IS NULL OR date_fin >= date_debut)
+);
+
+
+
+CREATE INDEX ON vehicule(id_client);
+CREATE INDEX ON borne(id_station);
+CREATE INDEX ON session_recharge(id_borne);
+CREATE INDEX ON session_recharge(id_vehicule);
+CREATE INDEX ON paiement(id_session);
+CREATE INDEX ON incident(id_borne);
+CREATE INDEX ON intervention(id_incident);
+CREATE INDEX ON intervention(id_technicien);
