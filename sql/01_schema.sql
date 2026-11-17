@@ -105,3 +105,7 @@ ALTER TABLE session_recharge
 ALTER TABLE incident
     ADD CONSTRAINT chk_incident_statut
     CHECK (statut IN ('ouvert', 'resolu'));
+
+ALTER TABLE borne
+    ADD CONSTRAINT chk_borne_etat
+    CHECK (statut IN ('disponible', 'hors_service', 'maintenance'));
