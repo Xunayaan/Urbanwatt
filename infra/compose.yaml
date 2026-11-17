@@ -1,0 +1,20 @@
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres_urbanwatt
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Variable manquante}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Variable manquante}
+      POSTGRES_DB: ${POSTGRES_DB:?Variable manquante}
+
+    ports:
+      - "${POSTGRES_BIND_IP:-127.0.0.1}:${POSTGRES_PORT:-5432}:5432" #Pour autoriser l'accès à la base
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
