@@ -108,4 +108,4 @@ ALTER TABLE incident
 
 ALTER TABLE borne
     ADD CONSTRAINT chk_borne_etat
-    CHECK (statut IN ('disponible', 'hors_service', 'maintenance'));
+    CHECK (etat IN ('disponible', 'hors_service', 'maintenance'));
