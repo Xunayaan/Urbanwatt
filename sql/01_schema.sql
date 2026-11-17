@@ -95,3 +95,13 @@ CREATE INDEX ON paiement(id_session);
 CREATE INDEX ON incident(id_borne);
 CREATE INDEX ON intervention(id_incident);
 CREATE INDEX ON intervention(id_technicien);
+
+-- Apres quelques test nous avons réalisé que nous avons oublié de mettre des contraintes pour les statuts
+
+ALTER TABLE session_recharge
+    ADD CONSTRAINT chk_session_statut
+    CHECK (statut IN ('annulee', 'terminee', 'interrompue', 'en_cours'));
+
+ALTER TABLE incident
+    ADD CONSTRAINT chk_incident_statut
+    CHECK (statut IN ('ouvert', 'resolu'));
