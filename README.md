@@ -27,6 +27,7 @@ projet-urbanwatt/
 │             
 └── sql/
     ├── 01_schema.sql
+    ├── 01.1.rôle.sql
     ├── 02_verification.sql
     └── 03_requetes.sql
 
