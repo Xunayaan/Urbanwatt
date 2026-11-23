@@ -18,7 +18,8 @@ projet-urbanwatt/
 │       
 ├── docs/
 │   ├── Documentation.pdf
-│   └── Urbanwatt_schema.jpg
+│   ├──  Urbanwatt_schema.jpg
+│   └──
 ├── app/
 │    ├──
 │
