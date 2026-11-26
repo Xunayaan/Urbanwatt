@@ -1,0 +1,26 @@
+# Ce compose ne lance QUE l'API : la base PostgreSQL existe déjà (gérée avec pgAdmin).
+# DATABASE_URL est lu dans le fichier .env.
+#
+# Pointer vers la base :
+#  - base publiée sur la machine hôte (port 5432)  -> host.docker.internal
+#  - base dans un autre conteneur Docker           -> voir le bloc "networks" ci-dessous
+services:
+  api:
+    build: .
+    container_name: bornes_api
+    env_file: .env
+    ports:
+      - "8000:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    networks:
+      - bdd
+
+# Décommenter si la base tourne dans un conteneur d'un autre docker-compose :
+# 1) `docker network ls` pour trouver le réseau de la base
+# 2) mettre le NOM DU CONTENEUR de la base comme hôte dans DATABASE_URL
+networks:
+  bdd:
+    external: true
+    name: projet_urbanwatt_default
