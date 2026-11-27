@@ -59,6 +59,7 @@ projet-urbanwatt/
 | `Dictionnaire de données` | Tableau de justification des choix de la base de données |
 | `UrbanWatt_Schema.jpg` | Ajouter les rôles des utilisateurs à la base de données  |
 | `Documentation.pdf` | Documentation complète du projet + scénario de test + stratégie de sauvegarde |
+| `Repartition.pdf` | Répartition des tâches lors de la réalisation du projet |
 
 
 
