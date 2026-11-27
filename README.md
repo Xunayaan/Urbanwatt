@@ -19,7 +19,9 @@ projet-urbanwatt/
 ├── docs/
 │   ├── Documentation.pdf
 │   ├── Urbanwatt_schema.jpg
+│   ├── Repartition.pdf
 │   └── DictionnaireDonnées.xlsx
+│
 │
 ├── infra/
 │    ├──  compose.yaml
