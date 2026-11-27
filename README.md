@@ -18,14 +18,13 @@ projet-urbanwatt/
 │       
 ├── docs/
 │   ├── Documentation.pdf
-│   ├──  Urbanwatt_schema.jpg
+│   ├── Urbanwatt_schema.jpg
 │   └── DictionnaireDonnées.xlsx
-├── app/
-│    ├──
 │
 ├── infra/
-│    └── compose.yaml
-│             
+│    ├──  compose.yaml
+│    └──  env.example
+│              
 └── sql/
     ├── 01_schema.sql
     ├── 01.1.rôle.sql
@@ -39,9 +38,8 @@ projet-urbanwatt/
 
 | Répertoire | Contenu | Quand l'utiliser |
 |---|---|---|
-| `data/raw/` | Les neuf fichiers CSV d'origine, non modifiés. Séparateur `;`, encodage UTF-8, première ligne = en-têtes. | Pour importer les données ou vérifier une valeur à la source. Ne pas modifier ces fichiers. |
 | `docs/` | La documentation du modèle : cardinalités, règles de gestion et hypothèses à valider. | Pour comprendre pourquoi les tables sont liées de cette façon. |
-| `docs/schema/` | Le schéma de la base (MCD/MLD) avec les clés primaires, les clés étrangères et les cardinalités. | Pour avoir une vue d'ensemble avant d'écrire une requête. |
+| `infra/` | Fichier compose du conteneur Docker et exemple du .env de configuration | Pour mettre en place le projet de votre côté |
 | `sql/` | Les scripts SQL, numérotés dans leur ordre d'exécution. | Pour créer la base, importer les données puis contrôler leur cohérence. |
 
 ### Détail du répertoire `sql/`
@@ -49,22 +47,19 @@ projet-urbanwatt/
 | Fichier | Rôle |
 |---|---|
 | `01_schema.sql` | Crée les neuf tables avec leurs clés primaires, clés étrangères, contraintes (`UNIQUE`, `CHECK`) et index. |
+| `01.1.role.sql` | Ajouter les rôles des utilisateurs à la base de données  |
 | `02_verification.sql` | Requêtes de vérification des tables  |
 | `03_requêtes.sql` | Requêtes des questions du slide. |
 
-## Les données sources
 
-| Fichier | Table | Lignes | Contenu |
-|---|---|---|---|
-| `clients.csv` | `client` | 15 000 | Clients inscrits |
-| `vehicules.csv` | `vehicule` | 18 000 | Véhicules, rattachés à un client |
-| `stations.csv` | `station` | 120 | Sites de recharge |
-| `bornes.csv` | `borne` | 600 | Bornes, rattachées à une station |
-| `sessions_recharge.csv` | `session_recharge` | 250 000 | Recharges d'un véhicule sur une borne |
-| `paiements.csv` | `paiement` | 217 300 | Paiements, rattachés à une session |
-| `incidents.csv` | `incident` | 5 000 | Incidents signalés sur une borne |
-| `interventions.csv` | `intervention` | 4 162 | Interventions sur un incident, réalisées par un technicien |
-| `techniciens.csv` | `technicien` | 120 | Techniciens de maintenance |
+### Détail du répertoire `docs/`
+
+| Fichier | Rôle |
+|---|---|
+| `Dictionnaire de données` | Tableau de justification des choix de la base de données |
+| `UrbanWatt_Schema.jpg` | Ajouter les rôles des utilisateurs à la base de données  |
+| `Documentation.pdf` | Documentation complète du projet + scénario de test + stratégie de sauvegarde |
+
 
 
 ## Ordre de chargement
