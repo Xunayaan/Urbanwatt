@@ -1,26 +1,38 @@
-# Ce compose ne lance QUE l'API : la base PostgreSQL existe déjà (gérée avec pgAdmin).
-# DATABASE_URL est lu dans le fichier .env.
+# Lance l'API et l'interface web. La base PostgreSQL tourne dans SON PROPRE conteneur
+# (autre docker-compose / autre commande) : elle doit être connectée au réseau externe
+# défini en bas de ce fichier (voir le guide, étape « Réseau Docker »).
 #
-# Pointer vers la base :
-#  - base publiée sur la machine hôte (port 5432)  -> host.docker.internal
-#  - base dans un autre conteneur Docker           -> voir le bloc "networks" ci-dessous
+#   navigateur ──► web (nginx :80) ──/api/──► api (FastAPI :8000) ──► conteneur PostgreSQL
+#                  http://localhost:8080
 services:
   api:
     build: .
-    container_name: bornes_api
+    container_name: api_urbanwatt
     env_file: .env
     ports:
-      - "8000:8000"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    restart: unless-stopped
+      - "8000:8000"          # accès direct à l'API et au Swagger : http://localhost:8000/docs
     networks:
-      - bdd
+      - bornes_net
+    restart: unless-stopped
+    healthcheck:             # teste uniquement que le processus répond (pas la base)
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
-# Décommenter si la base tourne dans un conteneur d'un autre docker-compose :
-# 1) `docker network ls` pour trouver le réseau de la base
-# 2) mettre le NOM DU CONTENEUR de la base comme hôte dans DATABASE_URL
+  web:
+    build: ./frontend
+    container_name: web_urbanwatt
+    ports:
+      - "8080:80"            # interface web : http://localhost:8080
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - bornes_net
+    restart: unless-stopped
+
 networks:
-  bdd:
-    external: true
-    name: projet_urbanwatt_default
+  bornes_net:
+    external: true           # réseau créé AVANT, partagé avec le conteneur de la base
+    name: ${DB_NETWORK:-bornes_net}

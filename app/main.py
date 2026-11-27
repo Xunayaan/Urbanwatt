@@ -1,7 +1,9 @@
 from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from app.config import settings
 from app.database import get_db
 from app.errors import register_error_handlers
 from app.routers import (
@@ -28,6 +30,14 @@ app = FastAPI(
 )
 
 register_error_handlers(app)
+
+# CORS : autorise l'interface web (servie sur une autre origine en développement) à appeler l'API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins_list,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 for module in (
     clients,
